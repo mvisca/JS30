@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="100%" height="100%"></canvas>
+
+<script>
+
+  const canvas = document.getElementById('draw');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  var hue = Math.floor(Math.random() * 360 );
+  var sat = Math.floor(Math.random() * 100);
+  var line = Math.floor(Math.random() * 100 );
+  var dir = Math.random() < 0.5;
+
+  ctx.strokeStyle = "#BADA55";
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 10;
+
+  let isDrawing = false;
+
+  let lastX = 0;
+  let lastY = 0;
+
+  function draw(e) {
+
+    if(!isDrawing) return;
+
+    ctx.strokeStyle = `hsl(${hue}, ${sat}%, 50%)`;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    hue++;
+    if (hue >=360) {
+      hue = 0;
+    }
+
+    if (dir) {
+      ctx.lineWidth ++;
+    } else {
+      ctx.lineWidth --;
+    }
+
+    if (ctx.lineWidth >= 70 || ctx.lineWidth <= 1) {
+      dir = !dir;
+    }
+  }
+
+  canvas.addEventListener('mousemove', draw);
+
+  canvas.addEventListener('mousedown', (e) => {
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+    isDrawing = true;
+    hue = Math.floor(Math.random() * 360 );
+    sat = Math.floor(Math.random() * 100);
+    line = Math.floor(Math.random() * 70 );
+    dir = Math.random() < 0.5;
+});
+
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+
+</script>
+
+<style>
+  html, body, {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>

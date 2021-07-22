@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+
+<body>
+
+  <h2>Update CSS Variables with <strong class="hl">Variables</strong> and <span class="hl">JS</span></h2>
+
+  <div class="controls">
+    <div>
+      <label for="size"><small>Size:</small></label>
+      <input id="size" type="range" min="40" max="600" value="400" data-suffix="size">
+    </div>
+
+    <div>
+      <label for="blur"><small>Blur:</small></label>
+      <input id="blur" type="range" min="0" max="20" value="10" data-suffix="blur">
+    </div>
+
+    <div>
+      <label for="base"><small>Base Color</small></label>
+      <input id="base" type="color" value="#8BF330" data-suffix="base">
+    </div>
+  </div>
+
+  <img style="margin-top: 0" src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+  :root {
+    --size: 400px;
+    --padd: 20px;
+    --base: ##8BF330;
+    --blur: 10px;
+  }
+
+  img {
+    background: var(--base);
+    width: var(--size);
+    padding: var(--padd);
+    filter: blur(var(--blur));
+  }
+
+  body {
+    text-align: center;
+    background: #193549;
+    color: white;
+    font-family: 'helvetica neue', sans-serif;
+    font-weight: 100;
+    font-size: 50px;
+  }
+
+  input {
+    width: 200px;
+  }
+
+  .controls {
+    margin-bottom: 50px;
+  }
+
+  .hl {
+    color: var(--base);
+  }
+
+</style>
+
+<script>
+
+  const inputs = document.querySelectorAll('.controls input');
+
+  function inputMod() {
+    // console.log(this.dataset.suffix);
+    const strSuffix = (this.dataset.suffix === "base") ? "" : "px";
+    document.documentElement.style.setProperty(`--${this.dataset.suffix}`, `${this.value}${strSuffix}`);
+    if (this.dataset.suffix === "size") {
+      document.documentElement.style.setProperty('--padd', `${Math.floor(this.value / 20)}${strSuffix}`);
+    }
+  }
+
+  inputs.forEach(input => input.addEventListener('change', inputMod));
+  inputs.forEach(input => input.addEventListener('mousemove', inputMod));
+
+</script>
+
+</body>
+
+</html>
