@@ -16,7 +16,7 @@
       max-width: 400px;
       margin: 50px auto;
       background: white;
-      border-radius: 5px;
+      border-radius: 5px red;
       box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
     }
 
@@ -96,6 +96,29 @@
   </div>
 
 <script>
+  let lastChecked;
+  const checkboxes = document.querySelectorAll('.inbox input');
+
+
+  function packChecks(e) {
+    let checking = false;
+    if (e.shiftKey && this.checked) {
+      checkboxes.forEach(checkbox => {
+        if (checkbox === lastChecked || checkbox === this) {
+          checking = !checking;
+          console.log(checkbox);
+          console.warn(`Checking current-state: ${checking}`);
+        } // Checking toggle if end
+        if (checking) {
+          checkbox.checked = true;
+        } // Checkin if end
+      })  // For each end
+    }     // Shift and check added if end
+    if (this.checked) { lastChecked = this };
+  }       // Function end
+
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', packChecks));
+
 </script>
 </body>
 </html>
