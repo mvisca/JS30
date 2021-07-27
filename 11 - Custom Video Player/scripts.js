@@ -23,18 +23,34 @@ function skip() {
 }
 
 function doRangeUpdate() {
-  console.log(this.value);
-  console.log(this.name);
   video[this.name] = this.value;
+}
+
+function doProgress() {
+  const percent = (video.currentTime / video.duration) * 100;
+  progressBar.style.flexBasis = `${percent}%`;
+}
+
+function doDragProgress(e) {
+    const percent = (e.offsetX / progress.offsetWidth);
+    video.currentTime = video.duration * percent;
 }
 
 // Hook up the event listeners
 video.addEventListener('click', togglePlay);
 video.addEventListener('pause', updateButton);
 video.addEventListener('play', updateButton);
+video.addEventListener('timeupdate', doProgress);
 
 toggle.addEventListener('click', togglePlay);
 
 skippers.forEach(button => button.addEventListener('click', skip));
 
 ranges.forEach(range => range.addEventListener('change', doRangeUpdate));
+ranges.forEach(range => range.addEventListener('mousemove', doRangeUpdate));
+
+let mousedown = false;
+progress.addEventListener('click', doDragProgress);
+progress.addEventListener('mousemove', (e) => mousedown && doDragProgress(e));
+progress.addEventListener('mousedown', () => mousedown = true);
+progress.addEventListener('mouseup', () => mousedown = false);
