@@ -5,9 +5,26 @@
   <title>JS Reference VS Copy</title>
 </head>
 <body>
+  <h1>Check the console <strong style="color: red;">>></strong> [ctrl] + 'J'</h1>
 
   <script>
     // start with strings, numbers and booleans
+
+    let age = 500;
+    let ageii = age;
+    console.log(age, ageii);
+    ageii = 200;
+    console.log(age, ageii);
+
+    let name = 'martin';
+    let nameii = name;
+    console.log(name, nameii);
+    nameii = 'nitram';
+    console.log(name, nameii);
+
+    let nameiii = new String(nameii);
+    nameii = 'mart';
+    console.log(nameii, nameiii);
 
     // Let's say we have an array
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
@@ -15,6 +32,20 @@
     // and we want to make a copy of it.
 
     // You might think we can just do something like this:
+    const teami = players;
+    const teamii = players.slice();
+    const teamiii = [].concat(players);
+    const teamiiii = [...players];
+    const teamiiiii = Array.from(players);
+
+    teami.push('Coucou');
+
+    console.table(players);
+    console.table(teami);
+    console.table(teamii);
+    console.table(teamiii);
+    console.table(teamiiii);
+
 
     // however what happens when we update that array?
 
@@ -44,7 +75,26 @@
 
     // and think we make a copy:
 
+    console.log('*************************');
+
+    const personi = Object.assign({}, person, { name: 'mart', number:99, vehicle: 'bike'});
+    console.table(person);
+    personi.name = 'wes';
+    console.table(personi);
+    console.log(person.name);
+
+    const personii = Object.assign({}, personi, { social: { twitter: '@wesbos', tiktok: 'wesbostiktok' }});
+    console.table(personii);
+
+    console.log('*********************');
+
+    const personiii = Object.assign({}, personii);
+    const personiiii = JSON.parse(JSON.stringify(personii));
+    console.table(personiii);
+    console.table(personiiii);
+
     // how do we take a copy instead?
+
 
     // We will hopefully soon see the object ...spread
 
