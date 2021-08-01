@@ -181,7 +181,30 @@
       Video 58
     </li>
   </ul>
+  <div class="sum-time"></div>
 <script>
+
+
+const videoNodes = Array.from(document.querySelectorAll('[data-time]'));
+
+
+const time = videoNodes
+  .reduce((total, video) =>
+    total + (parseInt(video.dataset.time.split(':')[0]) * 60) + parseInt(video.dataset.time.split(':')[1]), 0);
+
+let secsLeft = time;
+
+const hours = Math.floor(time / 3600);
+secsLeft -= hours * 3600;
+
+const mins = Math.floor(secsLeft / 60);
+secsLeft -= mins * 60;
+
+const sumTime = document.querySelector('.sum-time');
+const total = `<h1>Total time: ${hours}:${mins}:${secsLeft}</h1>`;
+
+sumTime.innerHTML = total;
+
 </script>
 </body>
 </html>
