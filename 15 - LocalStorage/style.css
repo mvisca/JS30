@@ -19,6 +19,7 @@ html {
 svg {
   fill: white;
   background: rgba(0, 0, 0, 0.1);
+
   padding: 20px;
   border-radius: 50%;
   width: 200px;
@@ -30,6 +31,16 @@ svg {
   max-width: 350px;
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.buttons-wrapper {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttons-wrapper input {
+  shadow: 0 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 h2 {

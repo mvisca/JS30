@@ -22,6 +22,11 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
+      <div class="buttons-wrapper">
+        <input type="submit" value="Delete list">
+        <input type="submit" value="Check all">
+        <input type="submit" value="Uncheck all">
+      </div>
     </form>
   </div>
 
@@ -60,7 +65,7 @@
     items[e.target.dataset.index].done = !items[e.target.dataset.index].done;
     localStorage.setItem('items', JSON.stringify(items));
     populateList(items, itemsList);
-    console.table(JSON.parse(localStorage.getItem('items')));
+    console.table (JSON.parse(localStorage.getItem('items')));
   }
 
   addItems.addEventListener('submit', addItem);
