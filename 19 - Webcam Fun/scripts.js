@@ -24,13 +24,12 @@ function paintToCanvas() {
 
   return setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height);
+
+    let pixels = ctx.getImageData(0, 0, width, height);
+    pixels = effects(pixels, 'rgb');
+
+    ctx.putImageData(pixels, 0, 0);
   }, 16);
-
-  let pixels = ctx.getImageData(0, 0, width, height);
-
-  pixels = redEffect(pixels);
-
-  ctx.putImageData(pixels, 0, 0);
 }
 
 function takePhoto() {
@@ -43,15 +42,27 @@ function takePhoto() {
   link.href = data;
   link.setAttribute('download', 'handsome');
   // link.textContent = 'Download Image';
-  link.innerHTML = `<img src="${data}" alt:="Selfmade photobooth"/>`;
+  link.innerHTML = `<img src="${data}" alt:="Selfmade photobooth" />`;
   strip.insertBefore(link, strip.firstChild);
 }
 
-function redEffect(pixels) {
-  for(let i = 0; i < pixels.data.lenght; i += 4) {
-    pixels.data[i] = pixels.data[i] + 100;
-    pixels.data[i + 1] = pixels.data[i + 1] - 80;
-    pixels.data[i + 2] = pixels.data[i + 2] * 0.3;
+function effects(pixels, effect = '') {
+  if (effect === 'red') {
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      pixels.data[i] = pixels.data[i] + 80;
+      pixels.data[i + 1] = pixels.data[i + 1] - 100;
+      pixels.data[i + 2] = pixels.data[i + 2] * 0.3;
+    }
+    return pixels;
+  }
+
+  if (effect === 'rgb') {
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      pixels.data[i - 150] = pixels.data[i];
+      pixels.data[i + 300] = pixels.data[i + 1];
+      pixels.data[i + 50] = pixels.data[i + 2];
+    }
+    return pixels;
   }
   return pixels;
 }
