@@ -20,9 +20,9 @@
       <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
 
       <label for="pitch">Pitch:</label>
-
       <input name="pitch" type="range" min="0" max="2" step="0.1">
-      <textarea name="text">Hello! I love JavaScript 👍</textarea>
+
+      <textarea name="text">Esto es una prueba</textarea>
       <button id="stop">Stop!</button>
       <button id="speak">Speak</button>
 
@@ -30,11 +30,80 @@
 
 <script>
   const msg = new SpeechSynthesisUtterance();
+
   let voices = [];
+
   const voicesDropdown = document.querySelector('[name="voice"]');
-  const options = document.querySelectorAll('[type="range"], [name="text"]');
+
+  const options = document.querySelectorAll('[type="range"]');
+
+  const inText = document.querySelector('[name="text"]');
+
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+  msg.text = document.querySelector('[name="text"]').value;
+
+  function populateVoices() {
+    voices = this.getVoices();
+    const voiceOptions = this.getVoices()
+      .map(voice => `<option value="${voice.name}">${voice.lang} - ${voice.name}</option>`)
+      .join();
+    voicesDropdown.innerHTML = voiceOptions;
+  }
+
+  function setVoice() {
+    // console.log(this.value);
+    msg.voice = voices.find(voice => voice.name === this.value);
+    toggleVoice();
+  }
+
+  function playVoice() {
+    // msg.text = document.querySelector('[name="text"]').value;
+    speechSynthesis.speak(msg);
+    console.log('play');
+  }
+
+  function stopVoice() {
+    speechSynthesis.cancel();
+    console.log('stop');
+  }
+
+  function toggleVoice(restart = true) {
+    speechSynthesis.cancel();
+    if (restart) {
+      speechSynthesis.speak(msg);
+    }
+    console.log('new voice');
+  }
+
+  function setOption() {
+    console.log(this.name,'ff', this.value);
+  }
+
+  function keyStarter(e) {
+    console.log(e);
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+    }
+    if (e.key === 'Enter') {
+      console.log('Enter leo');
+      msg.text = document.querySelector('[name="text"]').value;
+      playVoice();
+    }
+  };
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  voicesDropdown.addEventListener('change', setVoice);
+
+  options.forEach(option => option.addEventListener('change', setOption));
+
+  inText.addEventListener('keypress', keyStarter);
+
+
+  speakButton.addEventListener('click', playVoice);
+  stopButton.addEventListener('click', stopVoice);
+  window.addEventListener('keypress', keyStarter);
 </script>
 
 </body>
