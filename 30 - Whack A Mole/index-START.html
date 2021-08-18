@@ -13,22 +13,22 @@
 
   <div class="game">
     <div class="hole hole1">
-      <div class="mole"></div>
+      <div class="mole" data-num="1"></div>
     </div>
     <div class="hole hole2">
-      <div class="mole"></div>
+      <div class="mole" data-num="2"></div>
     </div>
     <div class="hole hole3">
-      <div class="mole"></div>
+      <div class="mole" data-num="3"></div>
     </div>
     <div class="hole hole4">
-      <div class="mole"></div>
+      <div class="mole" data-num="4"></div>
     </div>
     <div class="hole hole5">
-      <div class="mole"></div>
+      <div class="mole" data-num="5"></div>
     </div>
     <div class="hole hole6">
-      <div class="mole"></div>
+      <div class="mole" data-num="6"></div>
     </div>
   </div>
 
@@ -36,6 +36,54 @@
   const holes = document.querySelectorAll('.hole');
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
+  let lastHole;
+  let score = 0;
+  let lastHit = 0;
+
+  function randTime(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  function randHole(holes) {
+    const hole = holes[Math.floor(Math.random() * holes.length)];
+    if (hole === lastHole) {
+      return randHole(holes);
+    }
+    lastHole = hole;
+    return hole;
+  }
+
+  function peep() {
+    const time = randTime(200, 1000);
+    const hole = randHole(holes);
+
+    hole.classList.add('up');
+    setTimeout(() => {
+      hole.classList.remove('up');
+      if (!timeUp) peep();
+    }, time);
+  }
+
+  function startGame() {
+    scoreBoard.textContent = 0;
+    timeUp = false;
+    score = 0;
+    scoreBoard.textContent = score;
+    peep();
+    setTimeout(() => timeUp = true, 10000)
+  }
+
+  function bonk(e) {
+    if (lastHit === this.dataset.num) return;
+    lastHit = this.dataset.num;
+    if (!e.isTrusted) return;
+    score ++;
+    scoreBoard.textContent = score;
+    this.classList.remove('up');
+  }
+
+  moles.forEach(mole => mole.addEventListener('click', bonk));
+
 
 </script>
 </body>
